@@ -35,8 +35,6 @@ def set_base_setting_and_submit_banner_form(driver):
 def go_to_edit_page(driver):
     compaigns_page = CompaignsPage(driver)
     compaigns_page.open()
-    driver.refresh()
-    driver.refresh()
     link_edit = compaigns_page.link_edit
     link_edit.click()
 
@@ -44,7 +42,5 @@ def go_to_edit_page(driver):
 def delete_compaign(driver):
     compaigns_page = CompaignsPage(driver)
     compaigns_page.open()
-    driver.refresh()
-    driver.refresh()
     link_delete = compaigns_page.link_delete
     link_delete.click()
