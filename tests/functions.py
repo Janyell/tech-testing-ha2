@@ -27,6 +27,7 @@ def set_base_setting_and_submit_banner_form(driver):
     banner_form.set_title(Data.TITLE)
     banner_form.set_text(Data.TEXT)
     banner_form.set_url(Data.URL)
+    banner_form.wait_loading_image()
     banner_form.submit()
 
     return create_page

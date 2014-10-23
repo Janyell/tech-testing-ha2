@@ -101,7 +101,6 @@ class CreatePageTests(unittest.TestCase):
         interests.click_business_collapse_icon()
         interests.check_business_node(business_node_1)
         interests.check_business_node(business_node_2)
-
         main_button = self.create_page.main_button
         main_button.submit()
 

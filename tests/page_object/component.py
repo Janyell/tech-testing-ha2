@@ -60,6 +60,7 @@ class BannerForm(Component):
     IMAGE = 'input[data-name="image"]'
     PROMO_IMAGE = 'input[data-name="promo_image"]'
     SAVE_BUTTON = 'input.banner-form__save-button'
+    IMAGE_PREVIEW = '.banner-preview__img'
 
     def set_title(self, title):
         element = WebDriverWait(self.driver, 30, 0.1).until(
@@ -94,8 +95,24 @@ class BannerForm(Component):
         )
         element.send_keys(image)
 
+    def loading_images(self, driver, width):
+        images = driver.find_elements_by_css_selector(self.IMAGE_PREVIEW)
+        for image in images:
+            if image.value_of_css_property("width") == width:
+                return WebDriverWait(image, 30, 0.1).until(
+                    lambda d: d.value_of_css_property("background-image") is not None
+                )
+
+    def wait_loading_image(self):
+        WebDriverWait(self.driver, 30, 0.1).until(
+            lambda d: self.loading_images(d, '50px')
+        )
+        WebDriverWait(self.driver, 30, 0.1).until(
+            lambda d: self.loading_images(d, '320px')
+        )
+
     def submit(self):
-        element = WebDriverWait(self.driver, 30, 0.5).until(
+        element = WebDriverWait(self.driver, 30, 0.1).until(
             lambda d: d.find_element_by_css_selector(self.SAVE_BUTTON)
         )
         element.click()
@@ -172,7 +189,7 @@ class Interests(Component):
     IGNORED = '.campaign-setting__value[data-node-id="interests"]'
     BUSINESS_COLLAPSE_ICON = '#interests60 > .tree__node__collapse-icon'
     BUSINESS_CHECKBOX = '#interests60 > .tree__node__input'
-    BUSINESS_NODES_CHECKBOXES = '#interests60 > span > ul > li > input'
+    BUSINESS_NODES_CHECKBOXES = '#interests60 .tree__node__input'
 
     def click_ignored(self):
         element = WebDriverWait(self.driver, 30, 1).until(
@@ -194,7 +211,7 @@ class Interests(Component):
 
     def check_business_node(self, business_node_number):
         business_node = WebDriverWait(self.driver, 30, 0.5).until(
-            lambda d: d.find_elements_by_css_selector(self.BUSINESS_NODES_CHECKBOXES)[business_node_number]
+            lambda d: d.find_elements_by_css_selector(self.BUSINESS_NODES_CHECKBOXES)[business_node_number + 1]
         )
         business_node.click()
 
@@ -209,7 +226,7 @@ class Interests(Component):
 
     def is_business_node_checked(self, business_node_number):
         checkbox = WebDriverWait(self.driver, 30, 0.5).until(
-            lambda d: d.find_elements_by_css_selector(self.BUSINESS_NODES_CHECKBOXES)[business_node_number]
+            lambda d: d.find_elements_by_css_selector(self.BUSINESS_NODES_CHECKBOXES)[business_node_number + 1]
         )
         if checkbox.is_selected():
             return True
